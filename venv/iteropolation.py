@@ -26,11 +26,12 @@ def make_knots(points, rightBorder ,k):
 def make_knots3(points):
     per = points[-1]-points[0]
     points=np.asarray(points, dtype=float)
-    t_1 = np.asarray([x-per for x in points[-4:]])
-    t_2 = np.asarray([x + per for x in points[0:4]])
-    t_midle = points[2:-3]
-    np.append(t_midle,points[-2])
-    return np.concatenate((t_1,t_midle,np.linspace(points[-2],points[-1],3,False),t_2))
+    t_midle=np.concatenate((points[:1],points[2:-3],np.linspace(points[-2],points[-1],4)))
+    t_1 = np.asarray([x-per for x in t_midle[-4:-1]])
+    t_2 = np.asarray([x + per for x in t_midle[1:4]])
+    # t_midle = points[2:-3]
+    # np.append(t_midle,points[-2])
+    return np.concatenate((t_1,t_midle,t_2))
 
 
 
@@ -52,7 +53,7 @@ def make_periodic_spline(x,y,k):
     c = np.linalg.solve(interp_matrix,y)
     c=np.concatenate((c ,c[:k]))
 
-    return interpolate.BSpline.construct_fast(t,c,k)
+    return interpolate.BSpline(t,c,k)
 
 
 
